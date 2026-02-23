@@ -1,25 +1,34 @@
 package top.wsdx233.gadgeter.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +54,7 @@ fun ProcessingScreen(
     val logs = remember { mutableStateListOf<String>() }
     var progress by remember { mutableFloatStateOf(0f) }
     var currentTask by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
     val listState = rememberLazyListState()
 
     val initTask = stringResource(R.string.initializing)
@@ -287,7 +297,8 @@ fun ProcessingScreen(
                 log("ERROR: ${e.message}")
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                    onError(e.message ?: "Unknown Error")
+                    errorMessage = e.message ?: "Unknown Error"
+                    currentTask = context.getString(R.string.error_occurred)
                 }
             }
         }
@@ -296,7 +307,13 @@ fun ProcessingScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.processing), fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        if (errorMessage != null) stringResource(R.string.error_occurred)
+                        else stringResource(R.string.processing),
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
             )
         },
@@ -309,31 +326,123 @@ fun ProcessingScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedContent(
-                targetState = currentTask,
-                transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(500)) }
-            ) { task ->
-                Text(
-                    text = task,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
+            // Error State UI
+            AnimatedVisibility(
+                visible = errorMessage != null,
+                enter = fadeIn(tween(500)) + expandVertically(),
+                exit = fadeOut(tween(300)) + shrinkVertically()
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(bottom = 16.dp)
-                )
+                ) {
+                    // Error Icon
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFF44336).copy(alpha = 0.15f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Warning,
+                            contentDescription = stringResource(R.string.error_occurred),
+                            tint = Color(0xFFF44336),
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = stringResource(R.string.processing_failed),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFF44336)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Error message card
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFF44336).copy(alpha = 0.1f)
+                        )
+                    ) {
+                        Text(
+                            text = errorMessage ?: "",
+                            fontSize = 14.sp,
+                            fontFamily = FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(12.dp),
+                            textAlign = TextAlign.Start
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Back to Home button
+                    Button(
+                        onClick = { onError(errorMessage ?: "Unknown Error") },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth(0.6f)
+                            .height(48.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            stringResource(R.string.back_to_home),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
 
-            LinearProgressIndicator(
-                progress = { progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp),
-                color = MaterialTheme.colorScheme.secondary,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant
-            )
+            // Normal processing state UI
+            AnimatedVisibility(
+                visible = errorMessage == null,
+                enter = fadeIn(tween(300)),
+                exit = fadeOut(tween(300))
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    AnimatedContent(
+                        targetState = currentTask,
+                        transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(500)) }
+                    ) { task ->
+                        Text(
+                            text = task,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                    }
+
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(8.dp),
+                        color = MaterialTheme.colorScheme.secondary,
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Log View
+            // Log View (always visible)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -343,11 +452,13 @@ fun ProcessingScreen(
             ) {
                 LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
                     items(logs) { logMsg ->
+                        val isError = logMsg.startsWith("ERROR:")
                         Text(
                             text = "> $logMsg",
-                            color = Color.Green,
+                            color = if (isError) Color(0xFFFF5252) else Color.White,
                             fontFamily = FontFamily.Monospace,
                             fontSize = 12.sp,
+                            fontWeight = if (isError) FontWeight.Bold else FontWeight.Normal,
                             modifier = Modifier.padding(vertical = 2.dp)
                         )
                     }

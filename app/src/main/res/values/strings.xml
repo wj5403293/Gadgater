@@ -42,4 +42,7 @@
     <string name="share_apk">Share APK</string>
     <string name="install">Install</string>
     <string name="home">Home</string>
+    <string name="error_occurred">Error</string>
+    <string name="processing_failed">Processing Failed</string>
+    <string name="back_to_home">Back to Home</string>
 </resources>
