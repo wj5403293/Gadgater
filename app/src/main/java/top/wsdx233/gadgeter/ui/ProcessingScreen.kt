@@ -180,7 +180,14 @@ fun ProcessingScreen(
                 val fridaVersion = if (vFile.exists()) vFile.readText() else "16.2.1"
 
                 val architecturesPresent = libDir.listFiles()?.map { it.name } ?: emptyList()
-                val archsToFetch = if (architecturesPresent.isEmpty()) listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64") else architecturesPresent
+                // Built-in asset is arm (armeabi-v7a) only, so force that architecture
+                val archsToFetch = if (sourceType == 2) {
+                    listOf("armeabi-v7a")
+                } else if (architecturesPresent.isEmpty()) {
+                    listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+                } else {
+                    architecturesPresent
+                }
 
                 val localGadgetFile = File(context.cacheDir, "gadget_local_path.txt")
                 val localGadgetPath = if (localGadgetFile.exists()) localGadgetFile.readText() else null
