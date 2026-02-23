@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gadgeter</string>
+    <string name="inject_gadget_title">Inject Frida Gadget</string>
+    <string name="inject_gadget_desc">Select an APK to transform into a debuggable masterpiece, automated and ready to go.</string>
+    <string name="custom_so_name">Custom .so Name</string>
+    <string name="default_so_name">libfrida-gadget.so</string>
+    <string name="remote_download">Remote Download</string>
+    <string name="manual_specification">Manual Specification</string>
+    <string name="built_in_app">Built-in App</string>
+    <string name="select_frida_version">Select Frida Version:</string>
+    <string name="local_gadget_path">Local Frida Gadget (.so)</string>
+    <string name="builtin_info">Using built-in asset: frida-gadget-17.7.3-android-arm.so</string>
+    <string name="show_config">Show JSON Configuration</string>
+    <string name="hide_config">Hide JSON Configuration</string>
+    <string name="config_json">Configuration (JSON)</string>
+    <string name="select_local_file">Select Local File</string>
+    <string name="select_local_file_desc">Pick a local compiled APK via SAF</string>
+    <string name="extract_from_device">Extract from Device</string>
+    <string name="extract_from_device_desc">Choose an installed application</string>
+    <string name="select_installed_app">Select Installed App</string>
+    <string name="cancel">Cancel</string>
+    <string name="search_versions">Search versions...</string>
+    <string name="search_apps">Search apps...</string>
+    <string name="loading">Loading...</string>
+    
+    <string name="processing">Processing</string>
+    <string name="initializing">Initializing...</string>
+    <string name="preparing_workspace">Preparing Workspace</string>
+    <string name="extracting_apk">Extracting APK</string>
+    <string name="analyzing_apk">Analyzing APK</string>
+    <string name="injecting_smali">Injecting SMALI</string>
+    <string name="preparing_frida_gadget">Preparing Frida Gadget</string>
+    <string name="repackaging_apk">Repackaging APK</string>
+    <string name="signing_apk">Signing APK</string>
+    <string name="complete">Complete</string>
+    <string name="success">Success</string>
+    <string name="gadget_injected">Gadget Injected!</string>
+    <string name="app_ready_debugging">The application is ready for debugging.</string>
+    <string name="export_apk">Export</string>
+    <string name="share">Share</string>
+    <string name="share_apk">Share APK</string>
+    <string name="install">Install</string>
+    <string name="home">Home</string>
+</resources>

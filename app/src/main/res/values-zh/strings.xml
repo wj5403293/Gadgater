@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gadgeter</string>
+    <string name="inject_gadget_title">注入 Frida Gadget</string>
+    <string name="inject_gadget_desc">选择一个 APK 让其成为可调试的艺术品，全程自动化且即刻可用。</string>
+    <string name="custom_so_name">自定义 so 库名</string>
+    <string name="default_so_name">libfrida-gadget.so</string>
+    <string name="remote_download">远程下载</string>
+    <string name="manual_specification">手动指定</string>
+    <string name="built_in_app">应用内置</string>
+    <string name="select_frida_version">选择 Frida 版本：</string>
+    <string name="local_gadget_path">本地 Frida Gadget (.so)</string>
+    <string name="builtin_info">将使用内置库: frida-gadget-17.7.3-android-arm.so</string>
+    <string name="show_config">显示 JSON 配置</string>
+    <string name="hide_config">隐藏 JSON 配置</string>
+    <string name="config_json">配置 (JSON)</string>
+    <string name="select_local_file">选择本地文件</string>
+    <string name="select_local_file_desc">通过文件选择器挑选本地APK</string>
+    <string name="extract_from_device">从设备提取</string>
+    <string name="extract_from_device_desc">选择设备上的已安装应用</string>
+    <string name="select_installed_app">选择已安装应用</string>
+    <string name="cancel">取消</string>
+    <string name="search_versions">搜索版本...</string>
+    <string name="search_apps">搜索应用...</string>
+    <string name="loading">加载中...</string>
+    
+    <string name="processing">处理中</string>
+    <string name="initializing">正在初始化...</string>
+    <string name="preparing_workspace">准备工作区</string>
+    <string name="extracting_apk">解包 APK</string>
+    <string name="analyzing_apk">分析 APK</string>
+    <string name="injecting_smali">注入 SMALI</string>
+    <string name="preparing_frida_gadget">准备 Frida Gadget</string>
+    <string name="repackaging_apk">重新打包 APK</string>
+    <string name="signing_apk">签名 APK</string>
+    <string name="complete">完成</string>
+    <string name="success">成功</string>
+    <string name="gadget_injected">Gadget 已注入！</string>
+    <string name="app_ready_debugging">应用已准备好进行调试。</string>
+    <string name="export_apk">导出</string>
+    <string name="share">分享</string>
+    <string name="share_apk">分享 APK</string>
+    <string name="install">安装</string>
+    <string name="home">主页</string>
+</resources>
